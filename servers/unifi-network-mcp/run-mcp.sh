@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+# Change to the script's directory
+cd "$(dirname "$0")"
+
 # Require UNIFI_TARGETS to be set in the environment; do not fall back to config files.
 if [ -z "${UNIFI_TARGETS:-}" ]; then
 	echo "ERROR: UNIFI_TARGETS is not set" >&2

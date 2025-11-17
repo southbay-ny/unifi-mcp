@@ -37,6 +37,7 @@ jobs:
           VERSION=${GITHUB_REF_NAME:-latest}
           tar -czf unifi-network-mcp-${VERSION}.tar.gz \
             dist/ \
+            node_modules/ \
             run-mcp.sh \
             package.json \
             package-lock.json \

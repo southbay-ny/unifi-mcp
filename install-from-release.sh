@@ -3,7 +3,7 @@
 
 set -e
 
-REPO="southbay-ny/unifi-mcp"
+REPO="southbay-ny/unifi-network-mcp"
 TAG="${1:-latest}"
 INSTALL_DIR="${2:-$HOME/.local/share/unifi-network-mcp}"
 

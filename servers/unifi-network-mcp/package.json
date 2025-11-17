@@ -1,15 +1,40 @@
 {
   "name": "unifi-network-mcp",
   "version": "0.1.0",
-  "private": true,
+  "description": "Read-only MCP server for UniFi Network controllers",
   "type": "module",
+  "main": "dist/mcp.js",
+  "bin": {
+    "unifi-network-mcp": "dist/mcp.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    ".env.example"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/southbay-ny/unifi-network-mcp.git"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "unifi",
+    "ubiquiti",
+    "network",
+    "ai",
+    "llm"
+  ],
+  "author": "southbay-ny",
+  "license": "MIT",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "node dist/cli.js",
     "start:mcp": "node dist/mcp.js",
     "dev": "ts-node --esm src/cli.ts",
     "dev:mcp": "ts-node --esm src/mcp.ts",
-    "test:env": "npm run build && node dist/scripts/test-env.js"
+    "test:env": "npm run build && node dist/scripts/test-env.js",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^0.6.1",

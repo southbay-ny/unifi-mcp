@@ -1,0 +1,16 @@
+# Example Codex configuration using npm-published MCP
+# This is what users would add to ~/.codex/config.toml after npm publish
+
+[mcp_servers.unifi-network-mcp]
+    # Just use npx - no paths, no manual installation!
+    command = "npx"
+    args = ["-y", "unifi-network-mcp"]
+    
+    # Optional: Pin to specific version
+    # args = ["-y", "unifi-network-mcp@0.1.0"]
+    
+    [mcp_servers.unifi-network-mcp.env]
+        UNIFI_TARGETS = '[{"id":"home","base_url":"https://edge","controller_type":"unifi_os","default_site":"default","auth":{"apiKey":"YOUR_API_KEY","headerName":"X-API-KEY"},"verify_ssl":false,"timeout_ms":20000,"rate_limit_per_sec":5}]'
+
+# That's it! No installation, no paths, no scripts.
+# npx automatically downloads and caches the package on first run.

@@ -4,7 +4,7 @@
 set -e
 
 VERSION="${1:-v0.1.0}"
-REPO="southbay-ny/unifi-network-mcp"
+REPO="ryanbehan/unifi-network-mcp"
 TEST_DIR="/tmp/test-unifi-mcp-${VERSION}"
 
 echo "=========================================="

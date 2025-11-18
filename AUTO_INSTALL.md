@@ -70,7 +70,7 @@ Users can download just the wrapper script:
 
 ```bash
 # Download the auto-installer
-curl -o auto-install-mcp.sh https://raw.githubusercontent.com/southbay-ny/unifi-network-mcp/main/auto-install-mcp.sh
+curl -o auto-install-mcp.sh https://raw.githubusercontent.com/ryanbehan/unifi-network-mcp/main/auto-install-mcp.sh
 chmod +x auto-install-mcp.sh
 
 # Configure and run (downloads MCP automatically on first run)
@@ -113,7 +113,7 @@ You can host the auto-installer on your own infrastructure:
 
 ```bash
 # On your server
-curl -o /usr/local/bin/unifi-mcp https://raw.githubusercontent.com/southbay-ny/unifi-network-mcp/main/auto-install-mcp.sh
+curl -o /usr/local/bin/unifi-mcp https://raw.githubusercontent.com/ryanbehan/unifi-network-mcp/main/auto-install-mcp.sh
 chmod +x /usr/local/bin/unifi-mcp
 
 # Users just run

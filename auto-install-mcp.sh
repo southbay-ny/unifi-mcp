@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-REPO="southbay-ny/unifi-network-mcp"
+REPO="ryanbehan/unifi-network-mcp"
 INSTALL_DIR="${UNIFI_MCP_CACHE_DIR:-$HOME/.cache/unifi-network-mcp}"
 VERSION="${UNIFI_MCP_VERSION:-latest}"
 LOCK_FILE="$INSTALL_DIR/.version"

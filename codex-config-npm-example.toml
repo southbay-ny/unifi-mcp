@@ -10,7 +10,7 @@
     # args = ["-y", "unifi-network-mcp@0.1.0"]
     
     [mcp_servers.unifi-network-mcp.env]
-        UNIFI_TARGETS = '[{"id":"home","base_url":"https://edge","controller_type":"unifi_os","default_site":"default","auth":{"apiKey":"YOUR_API_KEY","headerName":"X-API-KEY"},"verify_ssl":false,"timeout_ms":20000,"rate_limit_per_sec":5}]'
+        UNIFI_TARGETS = '[{"id":"home","base_url":"https://<unifi_host>","controller_type":"unifi_os","default_site":"Default","auth":{"apiKey":"UNIFI_API_KEY","headerName":"X-API-KEY"},"verify_ssl":false,"timeout_ms":20000,"rate_limit_per_sec":5}]'
 
 # That's it! No installation, no paths, no scripts.
 # npx automatically downloads and caches the package on first run.

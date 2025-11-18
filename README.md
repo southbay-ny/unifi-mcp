@@ -1,6 +1,21 @@
 # UniFi Network MCP
 
-Read-only Model Context Protocol (MCP) server that exposes UniFi Network controller data (sites, devices, clients, alarms, sysinfo) to AI coding tools. This repo contains the TypeScript source, specs, and per-agent configuration snippets required to self-host the MCP.
+Read-only data retriever for the UniFi Network application (UniFi OS and classic). Provides TypeScript library functions, a CLI, and an MCP server for LLM clients. This repo contains the TypeScript source, specs, and per-agent configuration snippets required to self-host the MCP.
+
+## Features
+
+- Multiple controller targets with independent auth, TLS, timeouts, and rate limits.
+- Auth flows: UniFi OS via `POST /api/auth/login` and classic via `POST /api/login`.
+- Routing: UniFi OS under `/proxy/network/api/...`, classic under `/api/...`.
+- Network Integration API (API key) support:
+  - `GET /integration/v1/info` → `get_sysinfo`
+  - `GET /integration/v1/sites` → `list_sites`
+  - `GET /integration/v1/sites/{siteId}/devices` → `get_devices`
+  - `GET /integration/v1/sites/{siteId}/clients` → `get_clients`
+ 
+- Read-only only. No mutations.
+
+> **Scope note:** When connecting with an API key generated from the UniFi Network Integrations UI, only the Integration API endpoints listed above are guaranteed to work on UniFi Dream Machine / UniFi OS controllers. Endpoints such as `stat/health`, `stat/event`, and `stat/report` require username/password authentication and are not available to Integration API keys.
 
 ## Prerequisites
 
@@ -14,7 +29,7 @@ Read-only Model Context Protocol (MCP) server that exposes UniFi Network control
 
 1. Clone and install:
    ```bash
-   git clone https://github.com/southbay-ny/unifi-network-mcp.git
+   git clone https://github.com/ryanbehan/unifi-network-mcp.git
    cd unifi-network-mcp/servers/unifi-network-mcp
    npm install
    ```
@@ -71,7 +86,7 @@ Read-only Model Context Protocol (MCP) server that exposes UniFi Network control
 ## Quick Install from Release
 
 ```bash
-curl -L https://github.com/southbay-ny/unifi-network-mcp/releases/download/v0.1.0/unifi-network-mcp-v0.1.0.tar.gz | tar -xz -C ~/.local/share/
+curl -L https://github.com/ryanbehan/unifi-network-mcp/releases/download/v0.1.0/unifi-network-mcp-v0.1.0.tar.gz | tar -xz -C ~/.local/share/
 cd ~/.local/share/unifi-network-mcp
 cp .env.example .env
 # Edit .env with your UNIFI_TARGETS
@@ -237,7 +252,6 @@ Example `mcp.json` contents for this server:
 }
 ```
 
-This matches the **Local server configuration example** from the official GitHub Copilot MCP docs, but swaps in `unifi-network-mcp` and the UniFi-specific `UNIFI_TARGETS`.
 
 ## Verifying
 - `npm run test:env` calls `list_sites` against every configured target and fails fast on TLS/auth errors.
@@ -245,7 +259,6 @@ This matches the **Local server configuration example** from the official GitHub
   ```bash
   codex exec get_sysinfo --skip-git-repo-check
   ```
-  (Replace `codex` with Windsurf, Cursor, etc., per your IDE.)
 
 ## Distribution options
 
@@ -265,5 +278,5 @@ Each approach keeps the project free to distribute (only prebuilt JS + shell scr
 
 ## Repository
 
-- **GitHub**: https://github.com/southbay-ny/unifi-network-mcp
-- **Latest Release**: https://github.com/southbay-ny/unifi-network-mcp/releases/latest
+- **GitHub**: https://github.com/ryanbehan/unifi-network-mcp
+- **Latest Release**: https://github.com/ryanbehan/unifi-network-mcp/releases/latest

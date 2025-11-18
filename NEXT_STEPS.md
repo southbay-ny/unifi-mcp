@@ -2,7 +2,7 @@
 
 ## ✅ What's Working Now
 
-1. **GitHub Repository**: https://github.com/southbay-ny/unifi-network-mcp
+1. **GitHub Repository**: https://github.com/ryanbehan/unifi-network-mcp
 2. **Release v0.1.0**: Available with tarball and checksum
 3. **CI/CD Pipeline**: Automated builds on tag push
 4. **Tested Integrations**:
@@ -21,7 +21,7 @@
 ### Manual Test
 ```bash
 # Download and extract
-curl -L https://github.com/southbay-ny/unifi-network-mcp/releases/download/v0.1.0/unifi-network-mcp-v0.1.0.tar.gz | tar -xz -C /tmp/test-mcp
+curl -L https://github.com/ryanbehan/unifi-network-mcp/releases/download/v0.1.0/unifi-network-mcp-v0.1.0.tar.gz | tar -xz -C /tmp/test-mcp
 
 # Configure
 cd /tmp/test-mcp

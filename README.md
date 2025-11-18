@@ -33,6 +33,36 @@ Read-only Model Context Protocol (MCP) server that exposes UniFi Network control
      }
    ]'
    ```
+
+   Key fields:
+
+   - **id**: Friendly name for this UniFi target (e.g. `home`, `lab`). Use this `id` as `targetId` in MCP tool calls when you have more than one controller.
+   - **base_url**: The base URL of your UniFi controller (e.g. `https://<unifi_host>`). This is the same URL you use to access the UniFi Network UI.
+   - **auth.apiKey**: `UNIFI_API_KEY` obtained from **UniFi Network → Settings → System → Integrations** for the Network Application.
+   - **default_site**: Default site to use when a tool call does not specify `site`. Often `Default`; if your controller uses a different site name, check the Integration API **Sites** endpoint in the Network App.
+
+   Multiple targets are supported:
+
+   ```bash
+   export UNIFI_TARGETS='[
+     { "id": "home", "base_url": "https://<unifi_host_home>", "controller_type": "unifi_os", "default_site": "Default", "auth": { "apiKey": "UNIFI_API_KEY_HOME", "headerName": "X-API-KEY" }, "verify_ssl": false, "timeout_ms": 20000, "rate_limit_per_sec": 5 },
+     { "id": "lab",  "base_url": "https://<unifi_host_lab>",  "controller_type": "unifi_os", "default_site": "Default", "auth": { "apiKey": "UNIFI_API_KEY_LAB",  "headerName": "X-API-KEY" }, "verify_ssl": false, "timeout_ms": 20000, "rate_limit_per_sec": 5 }
+   ]'
+   ```
+
+   - When **one** target is configured, MCP tools can omit `targetId` and will automatically use that single target.
+   - When **multiple** targets are configured, pass `targetId` (e.g. `home` or `lab`) in the MCP tool arguments so the server knows which controller to use.
+
+   Example tool calls (multi-target):
+   - List sites on `home` (default site):
+     - Conceptual args: `{ "targetId": "home" }`
+   - Get devices from `lab` / `Default` site:
+     - Conceptual args: `{ "targetId": "lab", "site": "Default" }`
+   - With Codex CLI, for example:
+     ```bash
+     codex exec "call get_devices with targetId lab and site Default" --skip-git-repo-check
+     ```
+
 3. Build once (emits `dist/` artifacts shared by every tool below):
    ```bash
    npm run build
@@ -115,7 +145,7 @@ Leave this process running while your IDE/CLI talks to the MCP.
 
 ### Amazon Q CLI (npx)
 1. Install the Amazon Q developer preview CLI.
-2. Edit `~/.amazon-q/mcp.json`:
+2. Edit `~/.aws/amazonq/mcp.json`:
    ```json
    {
      "servers": [
@@ -132,7 +162,7 @@ Leave this process running while your IDE/CLI talks to the MCP.
    ```
 3. Launch Q CLI with `amazon-q chat --mcp unifi-network`.
 
-### Opencode (OpenAI Desktop)
+### Opencode
 1. Create or edit `~/.config/opencode/opencode.json`:
    ```json
    {
@@ -166,6 +196,48 @@ Leave this process running while your IDE/CLI talks to the MCP.
    }
    ```
 3. Reload VS Code. Claude Code will launch the MCP via npm; verify with `@mcp unifi-network-mcp list_sites` in a Claude chat.
+
+For **Claude terminal / global config** (outside VS Code), add the server to `~/.claude/settings.json`:
+
+```json
+{
+  "mcpServers": {
+    "unifi-network-mcp": {
+      "command": "npx",
+      "args": ["-y", "unifi-network-mcp"],
+      "env": {
+        "UNIFI_TARGETS": "[{\"id\":\"home\",\"base_url\":\"https://<unifi_host>\",\"controller_type\":\"unifi_os\",\"default_site\":\"Default\",\"auth\":{\"apiKey\":\"UNIFI_API_KEY\",\"headerName\":\"X-API-KEY\"},\"verify_ssl\":false,\"timeout_ms\":20000,\"rate_limit_per_sec\":5}]"
+      }
+    }
+  }
+}
+```
+
+After saving, restart Claude terminal or Desktop; the `unifi-network-mcp` server will be available there as well.
+
+### GitHub Copilot Chat (npx)
+You can extend GitHub Copilot Chat with this MCP by adding a local server configuration in the same format documented by GitHub:
+
+- **Per-repository (recommended)**: create a `.vscode/mcp.json` file in the root of your repo.
+- **Global for VS Code**: add the same JSON to your user `settings.json` under Copilot's MCP configuration (see GitHub docs for exact key names).
+
+Example `mcp.json` contents for this server:
+
+```json
+{
+  "servers": {
+    "unifi-network-mcp": {
+      "command": "npx",
+      "args": ["-y", "unifi-network-mcp"],
+      "env": {
+        "UNIFI_TARGETS": "[{\"id\":\"home\",\"base_url\":\"https://<unifi_host>\",\"controller_type\":\"unifi_os\",\"default_site\":\"Default\",\"auth\":{\"apiKey\":\"UNIFI_API_KEY\",\"headerName\":\"X-API-KEY\"},\"verify_ssl\":false,\"timeout_ms\":20000,\"rate_limit_per_sec\":5}]"
+      }
+    }
+  }
+}
+```
+
+This matches the **Local server configuration example** from the official GitHub Copilot MCP docs, but swaps in `unifi-network-mcp` and the UniFi-specific `UNIFI_TARGETS`.
 
 ## Verifying
 - `npm run test:env` calls `list_sites` against every configured target and fails fast on TLS/auth errors.
